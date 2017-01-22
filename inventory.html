@@ -93,8 +93,7 @@
           <input ng-model="RackItemObj.Ports">
         </md-input-container>
         <span style="float-right">
-          <md-button ng-click="RackItem.push(RackItemObj); RackItemObj =
-            RackItemNew(); mode = 'list';">Save</md-button>
+          <md-button ng-click="RackItem.$add(RackItemObj); RackItemObj = RackItemNew(); mode = 'list';">Save</md-button>
         </span>
       </form>
     </md-content>
