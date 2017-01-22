@@ -1,62 +1,32 @@
 <html lang="en">
   <head>
-    
+
     <title>RIM</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- Angular Material style sheet -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   </head>
 
   <body ng-app="RackinApp" ng-cloak>
 
-    <md-toolbar>
+    <md-toolbar accent>
       <div class="md-toolbar-tools">
+        <a href="index.html">
+          <md-button class="md-icon-button" aria-label="Back">
+            <md-icon>arrow_back</md-icon>
+          </md-button>
+        </a>
         <h2>
-          <span>Rack Inventory Management</span>
+          <span>Inventory</span>
         </h2>
       </div>
     </md-toolbar>
 
     <md-content class="md-padding" layout-xs="column" layout="row">
-      <div layout="column" flex>
-        <md-card>
-          <md-card-title>
-            <md-card-title-text>
-              <span class="md-headline">Directories</span>
-            </md-card-title-text>
-          </md-card-title>
-          <md-card-actions layout="row" layout-align="end center">
-            <md-button>View</md-button>
-          </md-card-actions>
-        </md-card>
-      </div>
-      <div layout="column" flex>
-        <md-card>
-          <md-card-title>
-            <md-card-title-text>
-              <span class="md-headline">Inventory</span>
-            </md-card-title-text>
-          </md-card-title>
-          <md-card-actions layout="row" layout-align="end center">
-            <a href="inventory.html">
-              <md-button>View</md-button>
-            </a>
-          </md-card-actions>
-        </md-card>
-      </div>
-      <div layout="column" flex>
-        <md-card>
-          <md-card-title>
-            <md-card-title-text>
-              <span class="md-headline">Model Editor</span>
-            </md-card-title-text>
-          </md-card-title>
-          <md-card-actions layout="row" layout-align="end center">
-              <a href="Model.html"> <md-button>View</md-button></a>
-          </md-card-actions>
-        </md-card>
-      </div>
+
     </md-content>
 
     <!-- Angular Material requires Angular.js Libraries -->
