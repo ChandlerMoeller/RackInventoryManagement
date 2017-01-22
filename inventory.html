@@ -19,12 +19,14 @@
             <md-icon>arrow_back</md-icon>
           </md-button>
         </a>
+        <md-button ng-show="mode != 'list'" class="md-icon-button" aria-label="Cancel"
+          ng-click="mode = 'list'">
+          <md-icon>close</md-icon>
+        </md-button>
         <h2>
           <span ng-show="mode == 'list'">Inventory</span>
-          <span ng-show="mode == 'edit'">
-            <span ng-show="edit == 'new'">Add new item</span>
-            <span ng-show="edit != 'new'">Edit an item</span>
-          </span>
+          <span ng-show="mode == 'add'">Add new item</span>
+          <span ng-show="mode == 'edit'">Edit an item</span>
         </h2>
         <span flex></span>
         <md-button ng-show="mode != 'add'" class="md-icon-button" aria-label="New"
@@ -37,16 +39,8 @@
     <md-content ng-show="mode == 'list'" class="md-padding" layout-xs="column"
       layout="row" style="overflow:auto">
       <md-list ng-cloak flex>
-        <md-list-item ng-repeat="Item in RackItem" ng-click="viewRackItem(Item)">
-          <p>{{ Item.Model }} <small>{{ Item.AssetTag }}</small></p>
-          <md-button class="md-secondary md-icon-button"
-            ng-click="viewRackItem(Item, $event);">
-            <md-icon>remove_red_eye</md-icon>
-          </md-button>
-          <md-button class="md-secondary md-icon-button"
-            ng-click="RackItem.$remove(Item);">
-            <md-icon>delete</md-icon>
-          </md-button>
+        <md-list-item ng-repeat="Item in RackItem | orderBy:'Model'" ng-click="viewRackItem(Item, $event)">
+          <p><b>{{ Item.Model }}</b> {{ Item.AssetTag }}</p>
           <md-divider></md-divider>
         </md-list-item>
       </md-list>
@@ -80,7 +74,12 @@
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Direction</label>
-          <input ng-model="RackItemNew.Direction">
+          <md-select ng-model="RackItemNew.Direction">
+            <md-option ng-disabled><em>None</em></md-option>
+            <md-option ng-repeat="direction in ['Front', 'Back']" value="direction">
+              {{ direction }}
+            </md-option>
+          </md-select>
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Location</label>
@@ -88,11 +87,13 @@
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>System Power</label>
-          <input ng-model="RackItemNew.SystemPower">
+          <input ng-model="RackItemNew.SystemPower"
+          ng-pattern="/^[0-9]*(\.[0-9]+)?$/">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Heat Dissipation</label>
-          <input ng-model="RackItemNew.HeatDissipation">
+          <input ng-model="RackItemNew.HeatDissipation" ng-pattern="/^[0-9]*(\.[0-9]+)?$/">
+          <div ng-messages=""
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Plugs</label>
@@ -126,47 +127,7 @@
     <!-- Your application bootstrap  -->
     <script src="index.js"></script>
 
-    <script type="text/javascript">
-
-      var app = angular.module("InventoryApp", ["RackinApp", "ngSanitize"]);
-      app.controller("InventoryCtrl",
-          function($scope, $firebaseArray, $mdDialog) {
-            $scope.RackItem = $firebaseArray(
-              firebase.database().ref().child("RackItem")
-              );
-            $scope.Model = $firebaseArray(
-              firebase.database().ref().child("Model")
-              );
-            $scope.mode = 'list';
-            $scope.RackItemNew = null;
-            $scope.newRackItem = function() {
-              $scope.RackItem.$add($scope.RackItemNew);
-              $scope.mode = 'list';
-            };
-            $scope.viewRackItem = function(item, ev) {
-              $mdDialog.show(
-                $mdDialog.alert()
-                .title(item.Model + " " + item.AssetTag)
-                .clickOutsideToClose(true)
-                .htmlContent(
-                  "<ul><li><b>Model:</b> " + item.Model
-                  + "</li><li><b>Associated RU:</b> " + item.ASsociatedRU
-                  + "</li><li><b>Label:</b> " + item.Label
-                  + "</li><li><b>Asset Tag:</b> " + item.AssetTag
-                  + "</li><li><b>Serial Number:</b> " + item.SN
-                  + "</li><li><b>Description:</b> " + item.Description
-                  + "</li><li><b>Direction:</b> " + item.Direction
-                  + "</li><li><b>Location:</b> " + item.Location
-                  + "</li><li><b>SystemPower:</b> " + item.SystemPower
-                  + "</li><li><b>HeatDissipation:</b> " + item.HeatDissipation
-                  + "</li><li><b>Plugs:</b> " + item.Plugs
-                  + "</li><li><b>Ports:</b> " + item.Ports + "</li></ul>")
-                .ok('Close')
-                .targetEvent(ev)
-                );
-            };
-          });
-    </script>
+    <script src="inventory.js"></script>
 
     <style>
       md-list-item {
