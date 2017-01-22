@@ -12,6 +12,7 @@
      <link rel="stylesheet" href="style.css" />
 
     <link rel="styleSheet" href="release/ui-grid.min.css"/>
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   </head>
 
@@ -28,25 +29,35 @@
     </md-toolbar>
     
     <md-toolbar layou="row" class="md-hue-3">
-    	<div class="md-toolbar-tools">
-    <span>Models</span>
-    	</div>
+    	<!--div class="md-toolbar-tools">
+    	</div-->
     </md-toolbar>
+    <md-button ng-show="mode != 'add'" class="md-icon-button" aria-label="New"
+          ng-click="mode = 'add'">
+          <md-icon>add</md-icon>
+        </md-button>
 
-    <md-divider></md-divider>
 
+        <md-content ng-show="mode == 'list'" class="md-padding" layout-xs="column"
+      layout="row" style="overflow:auto">
      <body ng-controller="ModelCtrl">
-    <h3>Basic Smart-Table Starter</h3>
+    <h3>Models</h3>
+    <!--button type="button" ng-click="addItem(model)" class="btn btn-sm btn-success">
+            <i class="glyphicon glyphicon-plus">
+            </i> Add Entry
+    </button-->
     <table st-table="Model" class="table table-striped">
         <thead>
           <tr>
-              <th>Vendor</th>
-              <th>Model</th>
-              <th>Category</th>
-            <th>HeatDissipation</th>
-            <th>Systemower</th>
+              <th st-sort="Vendor">Vendor</th>
+              <th st-sort="Model">Model</th>
+              <th st-sort="Category">Category</th>
+              <th st-sort="HeatDissipation">HeatDissipation</th>
+            <th st-sort="Systemower">Systemower</th>
+            <th></th>
         </tr>
         </thead>
+        <th colspan="6"><input st-search="" class="form-control" placeholder="global search ..." type="text"/></th>
         <tbody>
         <tr ng-repeat="model in Model">
             <td>{{model.Vendor}}</td>
@@ -54,18 +65,43 @@
             <td>{{model.Category}}</td>
             <td>{{model.HeatDissipation}}</td>
             <td>{{model.Systemower}}</td>
+            <td><md-button class="md-icon-button" ng-click="Model.$remove(model)">
+             <md-icon>delete</md-icon></md-button>       
+            </td>
         </tr>
         </tbody>
     </table>
   </body>
+  </md-content>
 
-    <!--md-list ng-controller="ModelCtrl" ng-cloak>
-    	<md-list-item class="secondary-button-padding" ng-click="console.log("Hello")" ng-repeat="model in Model">
-    		<p>{{model.Vendor}}</p><p>{{model.Model}}</p><p>{{model.Category}}</p><p>{{model.HeatDissipation}}</p><p>{{model.Systemower}}</p>
-    	</md-list-item>		
-    </md-list-->
 
-   
+ <md-content ng-show="mode == 'add'" class="md-padding">
+      <form ng-submit="newVendorItem()">
+         <md-input-container class="md-block" flex-gt-xs>
+          <label>Vendor</label>
+          <input ng-model="ModelItemNew.Vendor">
+        </md-input-container>
+         <md-input-container class="md-block" flex-gt-xs>
+          <label>Model</label>
+          <input ng-model="ModelItemNew.Model">
+        </md-input-container>
+         <md-input-container class="md-block" flex-gt-xs>
+          <label>Category</label>
+          <input ng-model="ModelItemNew.Category">
+        </md-input-container>
+         <md-input-container class="md-block" flex-gt-xs>
+          <label>HeatDissipation</label>
+          <input ng-model="ModelItemNew.HeatDissipation">
+        </md-input-container>
+         <md-input-container class="md-block" flex-gt-xs>
+          <label>Systemower</label>
+          <input ng-model="ModelItemNew.Systemower">
+        </md-input-container>
+        <md-button type="submit">Add item</md-button>
+     </form>
+</md-content> 
+
+
 
     <md-content class="md-padding" layout-xs="column" layout="row">
 
@@ -77,10 +113,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
 
-     <script data-require="angular.js@1.2.21" data-semver="1.2.21" src="https://code.angularjs.org/1.2.21/angular.js"></script>
+   
 
      <script src="lrInfiniteScrollPlugin.js"></script>
-
+     
     <!-- Angular Material Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 
@@ -100,20 +136,18 @@
           function($scope, $firebaseArray) {
             var ref = firebase.database().ref().child("Model");
             $scope.Model = $firebaseArray(ref);
-          });
-    </script>
-    <script>
-        app.controller('notCtrl', ['$scope',
-        function ($scope) {
-          $scope.rowCollection = [
-              {firstName: 'Laurent', lastName: 'Renard', birthDate: new Date('1987-05-21'), balance: 102, email: 'whatever@gmail.com'},
-              {firstName: 'Blandine', lastName: 'Faivre', birthDate: new Date('1987-04-25'), balance: -2323.22, email: 'oufblandou@gmail.com'},
-              {firstName: 'Francoise', lastName: 'Frere', birthDate: new Date('1955-08-27'), balance: 42343, email: 'raymondef@gmail.com'}
-          ];
-        }
-    ]);
-    </script>
+            $scope.mode = 'list';
+        $scope.ModelItemNew = null;
+        $scope.newVendorItem = function(){
+            console.log($scope.ModelItemNew);
+            $scope.Model.$add($scope.ModelItemNew);
+            $scope.mode = 'list';
+        };
 
+          });
+
+    </script>
+    
 </body>
 </html>
 
