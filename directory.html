@@ -1,0 +1,160 @@
+<html lang="en">
+<head>
+
+  <title>RIM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+
+<body ng-app="RackinApp" ng-cloak>
+
+  <md-toolbar accent>
+    <div class="md-toolbar-tools">
+      <a href="index.html">
+        <md-button class="md-icon-button" aria-label="Back">
+          <md-icon>arrow_back</md-icon>
+        </md-button>
+      </a>
+      <h2>
+        <span id = "title">Directory</span>
+      </h2>
+    </div>
+  </md-toolbar>
+
+  <md-content class="md-padding" layout-xs="column" layout="row">
+  <div layout="column" flex>
+    <md-card>
+      <md-card-title>
+        <md-card-title-text>
+          <span class="md-headline">Directories</span>
+        </md-card-title-text>
+      </md-card-title>
+      <md-list ng-controller="DirectoryCtrl" ng-cloak>
+        <md-list-item ng-repeat="Item in Directory" ng-click="goto(Item.$id, Item.Contents, Item.RackContents, Item.Name)" ng-if="contentstoDisplay(Item.$id)">
+          <md-card-actions layout="grid" layout-align="end center">
+            <p>{{Item.Name}} </p>
+            <p>{{Item.Contents}} </p>
+            <p>{{Item.RackContents}} </p>
+            <a href="directory.html">
+              <md-button>View</md-button>
+            </a>
+          </md-card-actions>
+        </md-list-item>
+      </md-list>
+      <md-card>
+      </div>
+      </md-content>
+
+      <md-content class="md-padding" layout-xs="column" layout="row">
+      <div layout="column" flex>
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+            <span class="md-headline">Racks</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-list ng-controller="DirectoryCtrl" ng-cloak>
+            <md-list-item ng-repeat="Item2 in Rack" ng-if="rackcontentstoDisplay(Item2.$id)">
+              <md-card-actions layout="row" layout-align="end center">
+                <p>{{Item2.Name}} </p>
+                <p>{{Item2.Height}} </p>
+                <a href="directory.html">
+                  <md-button>View</md-button>
+                </a>
+              </md-card-actions>
+            </md-list-item>
+          </md-list>
+          <md-card>
+          </div>
+          </md-content>
+
+          <!-- Angular Material requires Angular.js Libraries -->
+          <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+          <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+          <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+          <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+
+          <!-- Angular Material Library -->
+          <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+          <!-- Firebase -->
+          <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+
+          <!-- AngularFire -->
+          <script src="https://cdn.firebase.com/libs/angularfire/2.2.0/angularfire.min.js"></script>
+
+          <!-- Your application bootstrap  -->
+          <script src="index.js"></script>
+
+          <script type="text/javascript">
+            var dir_title = ".";
+
+            var current_key = -1;
+            var current_contents = [];
+            var current_rack_contents = [];
+            app.controller("DirectoryCtrl",
+              function($scope, $firebaseArray) {
+                var ref = firebase.database().ref().child("Directory");
+                var refRack = firebase.database().ref().child("Rack");
+                function getroot() {
+                  if (current_key == -1) {
+                    ref.once('value', function(snapshot) {
+                      snapshot.forEach(function(childSnapshot) {
+                        var childData = childSnapshot.val();
+                        var parent = childData.Parent;
+                        if (parent == null) {
+                          current_key = childSnapshot.key;
+                          /*console.log(childData.Contents);*/
+                          current_contents = childData.Contents;
+                          current_rack_contents = childData.RackContents;
+                        }
+                      });
+                    });
+                  }
+                };
+                getroot();
+                var ref2 = firebase.database().ref().child("Directory/"+current_key+"/Contents");
+                $scope.Directory = $firebaseArray(ref);
+                $scope.Rack = $firebaseArray(refRack);
+                $scope.contentstoDisplay = function(id) {
+                  if (current_contents != null) {
+                    var iscontent = current_contents.includes(Number(id));
+                    return iscontent;
+                  } else {
+                    return false;
+                  }
+                };
+                $scope.rackcontentstoDisplay = function(id) {
+                  if (current_rack_contents != null) {
+                    var israckcontent = current_rack_contents.includes(Number(id));
+                    return israckcontent;
+                  } else {
+                    return false;
+                  }
+                };
+                $scope.goto = function(id, contents, rackcontents, name) {
+                  current_key = id;
+                  current_contents = contents;
+                  current_rack_contents = rackcontents;
+
+                  var title_span = document.getElementById('title');
+                  dir_title = dir_title + "/" + name
+                  title_span.innerText = dir_title;
+                };
+              });
+
+/*      function isincontents(val) {
+        return $.inArray(val, current_contents);
+      }*/
+
+
+    </script>
+
+  </body>
+  </html>
+
+<!--  | sortBy:Parent | filter:query -->
