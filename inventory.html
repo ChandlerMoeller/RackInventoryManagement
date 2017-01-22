@@ -10,27 +10,86 @@
 
   </head>
 
-  <body ng-app="RackinApp" ng-cloak>
+  <body ng-app="RackinApp" ng-controller="InventoryCtrl" ng-cloak>
 
     <md-toolbar accent>
       <div class="md-toolbar-tools">
-        <a href="index.html">
+        <a ng-if="mode == 'list'" href="index.html">
           <md-button class="md-icon-button" aria-label="Back">
             <md-icon>arrow_back</md-icon>
           </md-button>
         </a>
         <h2>
-          <span>Inventory</span>
+          <span ng-if="mode == 'list'">Inventory</span>
+          <span ng-if="mode == 'add'">Add new item</span>
         </h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="New" ng-disabled="mode ==
+          add" ng-click="mode = 'add'">
+          <md-icon>add</md-icon>
+        </md-button>
       </div>
     </md-toolbar>
 
-    <md-content class="md-padding" layout-xs="column" layout="row">
-      <md-list ng-controller="InventoryCtrl" ng-cloak>
+    <md-content ng-if="mode == 'list'" class="md-padding" layout-xs="column" layout="row">
+      <md-list ng-cloak>
         <md-list-item ng-repeat="Item in RackItem">
           <p>{{ Item.Model }} <small>{{ Item.AssetTag }}</small></p>
         </md-list-item>
       </md-list>
+    </md-content>
+
+    <md-content ng-if="mode == 'add'" class="md-padding">
+      <form name="RackItemAdd">
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Model</label>
+          <input ng-model="RackItemNew.Model">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Associated RU</label>
+          <input ng-model="RackItemNew.AssociatedRU">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Label</label>
+          <input ng-model="RackItemNew.Label">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Asset Tag</label>
+          <input ng-model="RackItemNew.AssetTag">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Serial Number</label>
+          <input ng-model="RackItemNew.SN">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Description</label>
+          <input ng-model="RackItemNew.Description">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Direction</label>
+          <input ng-model="RackItemNew.Direction">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Location</label>
+          <input ng-model="RackItemNew.Location">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>System Power</label>
+          <input ng-model="RackItemNew.SystemPower">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Heat Dissipation</label>
+          <input ng-model="RackItemNew.HeatDissipation">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Plugs</label>
+          <input ng-model="RackItemNew.Plugs">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Ports</label>
+          <input ng-model="RackItemNew.Ports">
+        </md-input-container>
+      </form>
     </md-content>
 
     <!-- Angular Material requires Angular.js Libraries -->
@@ -52,11 +111,35 @@
     <script src="index.js"></script>
 
     <script type="text/javascript">
-      app.controller("InventoryCtrl",
-          function($scope, $firebaseArray) {
-            var ref = firebase.database().ref().child("RackItem");
-            $scope.RackItem = $firebaseArray(ref);
-          });
+      var RackItemNew = function() {
+        return {
+          Model: "",
+          AssociatedRU: "",
+          Label: "",
+          AssetTag: "",
+          SN: "",
+          Description: "",
+          Direction: "",
+          Location: "",
+          SystemPower: "",
+          HeatDissipartion: "",
+          Plugs: "",
+          Ports: ""
+        };
+      }
+
+app.controller("InventoryCtrl",
+    function($scope, $firebaseArray) {
+      $scope.RackItem = $firebaseArray(
+        firebase.database().ref().child("RackItem")
+        );
+      $scope.Model = $firebaseArray(
+        firebase.database().ref().child("Model")
+        );
+      $scope.mode = 'list';
+      $scope.RackItemNew = RackItemNew();
+    });
+console.log(RackItemNew());
     </script>
 
   </body>
