@@ -35,38 +35,35 @@
 
     <md-divider></md-divider>
 
-     <body ng-controller="notCtrl">
+     <body ng-controller="ModelCtrl">
     <h3>Basic Smart-Table Starter</h3>
-    <table st-table="rowCollection" class="table table-striped">
+    <table st-table="Model" class="table table-striped">
         <thead>
           <tr>
               <th>Vendor</th>
               <th>Model</th>
               <th>Category</th>
             <th>HeatDissipation</th>
-            <th></th>
+            <th>Systemower</th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="row in rowCollection">
-            <td>{{row.firstName}}</td>
-            <td>{{row.lastName}}</td>
-            <td>{{row.birthDate | date:'shortDate'}}</td>
-            <td>{{row.balance}}</td>
-            <td>{{row.email}}</td>
+        <tr ng-repeat="model in Model">
+            <td>{{model.Vendor}}</td>
+            <td>{{model.Model}}</td>
+            <td>{{model.Category}}</td>
+            <td>{{model.HeatDissipation}}</td>
+            <td>{{model.Systemower}}</td>
         </tr>
         </tbody>
     </table>
   </body>
 
-    <md-subheader class="md-no-sticky">Vendor</md-subheader>
-    
-
-    <md-list ng-controller="ModelCtrl" ng-cloak>
+    <!--md-list ng-controller="ModelCtrl" ng-cloak>
     	<md-list-item class="secondary-button-padding" ng-click="console.log("Hello")" ng-repeat="model in Model">
     		<p>{{model.Vendor}}</p><p>{{model.Model}}</p><p>{{model.Category}}</p><p>{{model.HeatDissipation}}</p><p>{{model.Systemower}}</p>
     	</md-list-item>		
-    </md-list>
+    </md-list-->
 
    
 
