@@ -1,22 +1,34 @@
 <html lang="en">
-<head>
-<!-- Angular Material style sheet -->
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-<script type="text/javascript" src ="http://code.jquery.com/jquery.min.js"></script>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
+  <head>
 
-<body ng-app="RackinApp" ng-cloak>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 
-<h1>Rack Inventory Management</h1>
+  </head>
 
-<!-- Angular.js Libraries -->
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+  <body ng-app="RackinApp" ng-cloak>
 
-<!-- Angular Material Library -->
-<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>
+          <span>Rack Inventory Management</span>
+        </h2>
+      </div>
+    </md-toolbar>
 
-</body>
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+    <!-- Your application bootstrap  -->
+    <script type="text/javascript">
+      angular.module('RackinApp', ['ngMaterial']);
+    </script>
+
+  </body>
