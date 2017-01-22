@@ -26,7 +26,11 @@
     </md-toolbar>
 
     <md-content class="md-padding" layout-xs="column" layout="row">
-
+      <md-list ng-controller="InventoryCtrl" ng-cloak>
+        <md-list-item ng-repeat="Item in RackItem">
+          <p>{{ Item.Model }} <small>{{ Item.AssetTag }}</small></p>
+        </md-list-item>
+      </md-list>
     </md-content>
 
     <!-- Angular Material requires Angular.js Libraries -->
@@ -46,6 +50,14 @@
 
     <!-- Your application bootstrap  -->
     <script src="index.js"></script>
+
+    <script type="text/javascript">
+      app.controller("InventoryCtrl",
+          function($scope, $firebaseArray) {
+            var ref = firebase.database().ref().child("RackItem");
+            $scope.RackItem = $firebaseArray(ref);
+          });
+    </script>
 
   </body>
 </html>
