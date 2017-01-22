@@ -10,7 +10,7 @@
 
   </head>
 
-  <body ng-app="RackinApp" ng-controller="InventoryCtrl" ng-cloak>
+  <body ng-app="InventoryApp" ng-controller="InventoryCtrl" ng-cloak>
 
     <md-toolbar accent>
       <div class="md-toolbar-tools">
@@ -34,14 +34,20 @@
       </div>
     </md-toolbar>
 
-    <md-content ng-show="mode == 'list'" class="md-padding" layout-xs="column" layout="row">
-      <md-list ng-cloak>
-        <md-list-item ng-repeat="Item in RackItem">
+    <md-content ng-show="mode == 'list'" class="md-padding" layout-xs="column"
+      layout="row" style="overflow:auto">
+      <md-list ng-cloak flex>
+        <md-list-item ng-repeat="Item in RackItem" ng-click="viewRackItem(Item)">
           <p>{{ Item.Model }} <small>{{ Item.AssetTag }}</small></p>
+          <md-button class="md-secondary md-icon-button"
+            ng-click="viewRackItem(Item, $event);">
+            <md-icon>remove_red_eye</md-icon>
+          </md-button>
           <md-button class="md-secondary md-icon-button"
             ng-click="RackItem.$remove(Item);">
             <md-icon>delete</md-icon>
           </md-button>
+          <md-divider></md-divider>
         </md-list-item>
       </md-list>
     </md-content>
@@ -115,27 +121,58 @@
     <!-- AngularFire -->
     <script src="https://cdn.firebase.com/libs/angularfire/2.2.0/angularfire.min.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-sanitize.js"></script>
+
     <!-- Your application bootstrap  -->
     <script src="index.js"></script>
 
     <script type="text/javascript">
 
-app.controller("InventoryCtrl",
-    function($scope, $firebaseArray) {
-      $scope.RackItem = $firebaseArray(
-        firebase.database().ref().child("RackItem")
-        );
-      $scope.Model = $firebaseArray(
-        firebase.database().ref().child("Model")
-        );
-      $scope.mode = 'list';
-      $scope.RackItemNew = null;
-      $scope.newRackItem = function() {
-        $scope.RackItem.$add($scope.RackItemNew);
-        $scope.mode = 'list';
-      };
-    });
+      var app = angular.module("InventoryApp", ["RackinApp", "ngSanitize"]);
+      app.controller("InventoryCtrl",
+          function($scope, $firebaseArray, $mdDialog) {
+            $scope.RackItem = $firebaseArray(
+              firebase.database().ref().child("RackItem")
+              );
+            $scope.Model = $firebaseArray(
+              firebase.database().ref().child("Model")
+              );
+            $scope.mode = 'list';
+            $scope.RackItemNew = null;
+            $scope.newRackItem = function() {
+              $scope.RackItem.$add($scope.RackItemNew);
+              $scope.mode = 'list';
+            };
+            $scope.viewRackItem = function(item, ev) {
+              $mdDialog.show(
+                $mdDialog.alert()
+                .title(item.Model + " " + item.AssetTag)
+                .clickOutsideToClose(true)
+                .htmlContent(
+                  "<ul><li><b>Model:</b> " + item.Model
+                  + "</li><li><b>Associated RU:</b> " + item.ASsociatedRU
+                  + "</li><li><b>Label:</b> " + item.Label
+                  + "</li><li><b>Asset Tag:</b> " + item.AssetTag
+                  + "</li><li><b>Serial Number:</b> " + item.SN
+                  + "</li><li><b>Description:</b> " + item.Description
+                  + "</li><li><b>Direction:</b> " + item.Direction
+                  + "</li><li><b>Location:</b> " + item.Location
+                  + "</li><li><b>SystemPower:</b> " + item.SystemPower
+                  + "</li><li><b>HeatDissipation:</b> " + item.HeatDissipation
+                  + "</li><li><b>Plugs:</b> " + item.Plugs
+                  + "</li><li><b>Ports:</b> " + item.Ports + "</li></ul>")
+                .ok('Close')
+                .targetEvent(ev)
+                );
+            };
+          });
     </script>
+
+    <style>
+      md-list-item {
+        background: white;
+      }
+    </style>
 
   </body>
 </html>
