@@ -14,24 +14,27 @@
 
     <md-toolbar accent>
       <div class="md-toolbar-tools">
-        <a ng-if="mode == 'list'" href="index.html">
+        <a ng-show="mode == 'list'" href="index.html">
           <md-button class="md-icon-button" aria-label="Back">
             <md-icon>arrow_back</md-icon>
           </md-button>
         </a>
         <h2>
-          <span ng-if="mode == 'list'">Inventory</span>
-          <span ng-if="mode == 'add'">Add new item</span>
+          <span ng-show="mode == 'list'">Inventory</span>
+          <span ng-show="mode == 'edit'">
+            <span ng-show="edit == 'new'">Add new item</span>
+            <span ng-show="edit != 'new'">Edit an item</span>
+          </span>
         </h2>
         <span flex></span>
-        <md-button class="md-icon-button" aria-label="New" ng-disabled="mode ==
-          add" ng-click="mode = 'add'">
+        <md-button ng-show="mode != 'edit'" class="md-icon-button" aria-label="New"
+          ng-click="mode = 'edit'; edit = 'new'; RackItemObj = RackItemNew();">
           <md-icon>add</md-icon>
         </md-button>
       </div>
     </md-toolbar>
 
-    <md-content ng-if="mode == 'list'" class="md-padding" layout-xs="column" layout="row">
+    <md-content ng-show="mode == 'list'" class="md-padding" layout-xs="column" layout="row">
       <md-list ng-cloak>
         <md-list-item ng-repeat="Item in RackItem">
           <p>{{ Item.Model }} <small>{{ Item.AssetTag }}</small></p>
@@ -39,56 +42,60 @@
       </md-list>
     </md-content>
 
-    <md-content ng-if="mode == 'add'" class="md-padding">
-      <form name="RackItemAdd">
+    <md-content ng-show="mode == 'edit'" class="md-padding">
+      <form name="RackItemEdit">
         <md-input-container class="md-block" flex-gt-xs>
           <label>Model</label>
-          <input ng-model="RackItemNew.Model">
+          <input ng-model="RackItemObj.Model">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Associated RU</label>
-          <input ng-model="RackItemNew.AssociatedRU">
+          <input ng-model="RackItemObj.AssociatedRU">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Label</label>
-          <input ng-model="RackItemNew.Label">
+          <input ng-model="RackItemObj.Label">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Asset Tag</label>
-          <input ng-model="RackItemNew.AssetTag">
+          <input ng-model="RackItemObj.AssetTag">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Serial Number</label>
-          <input ng-model="RackItemNew.SN">
+          <input ng-model="RackItemObj.SN">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Description</label>
-          <input ng-model="RackItemNew.Description">
+          <input ng-model="RackItemObj.Description">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Direction</label>
-          <input ng-model="RackItemNew.Direction">
+          <input ng-model="RackItemObj.Direction">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Location</label>
-          <input ng-model="RackItemNew.Location">
+          <input ng-model="RackItemObj.Location">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>System Power</label>
-          <input ng-model="RackItemNew.SystemPower">
+          <input ng-model="RackItemObj.SystemPower">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Heat Dissipation</label>
-          <input ng-model="RackItemNew.HeatDissipation">
+          <input ng-model="RackItemObj.HeatDissipation">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Plugs</label>
-          <input ng-model="RackItemNew.Plugs">
+          <input ng-model="RackItemObj.Plugs">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Ports</label>
-          <input ng-model="RackItemNew.Ports">
+          <input ng-model="RackItemObj.Ports">
         </md-input-container>
+        <span style="float-right">
+          <md-button ng-click="RackItem.push(RackItemObj); RackItemObj =
+            RackItemNew(); mode = 'list';">Save</md-button>
+        </span>
       </form>
     </md-content>
 
@@ -137,9 +144,9 @@ app.controller("InventoryCtrl",
         firebase.database().ref().child("Model")
         );
       $scope.mode = 'list';
-      $scope.RackItemNew = RackItemNew();
+      $scope.edit = 'new';
+      $scope.RackItemObj = RackItemNew();
     });
-console.log(RackItemNew());
     </script>
 
   </body>
