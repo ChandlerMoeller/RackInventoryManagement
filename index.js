@@ -8,3 +8,9 @@ var config = {
 firebase.initializeApp(config);
 
 var app = angular.module('RackinApp', ['ngMaterial','firebase']);
+
+app.config(function($mdThemingProvider) {
+  var theme = $mdThemingProvider.theme('default');
+  theme.primaryPalette('blue');
+  theme.accentPalette('yellow');
+});
