@@ -7,7 +7,7 @@ var config = {
 };
 firebase.initializeApp(config);
 
-var app = angular.module('RackinApp', ['ngMaterial','firebase']);
+var app = angular.module('RackinApp', ['ngMaterial','firebase', 'ngTable']);
 
 app.config(function($mdThemingProvider) {
   var theme = $mdThemingProvider.theme('default');

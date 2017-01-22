@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Angular Material style sheet -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    <link rel="stylesheet"; href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css">
+
 
   </head>
 
@@ -18,7 +20,7 @@
           <span>Rack Inventory Management</span>
         </h2>
         <span flex></span>
-        <a href="index.html"> <md-button class="md-raised" aria-label="Home">Home</md-button></a>
+        <a href="index.html"> <md-button class="md-raised" aria-label="Home" >Home</md-button></a>
       </div>
     </md-toolbar>
     
@@ -39,13 +41,38 @@
     	</md-list-item>		
     </md-list>
 
+    <fielset>
+    <button type="button" ng-click="addModel()">Add Person</button>
+    </fielset>
+    <!--tr ng-repeat="model in Model">
+    	<td>
+    	{{model.Vendor}}	
+    	</td>
+    	<td>
+    	{{model.Model}}	
+    	</td>
+    	<td>
+    	{{model.Category}}	
+    	</td>
+    	<td>
+    	{{model.HeatDissipation}}	
+    	</td>
+    	<td>
+    	{{model.Systemower}}	
+    	</td>
+    </tr-->
 
-    <div ng-controller="ModelCtrl">
-    	<div id="grid1" ui-grid="{ data: Model }" class="grid"></div>
-    </div>
-    
+   
 
     <md-content class="md-padding" layout-xs="column" layout="row">
+     <table ng-table="vm.tableParams" class="table" show-filter="true">
+    <tr ng-repeat="user in $data">
+        <td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
+            {{user.name}}</td>
+        <td title="'Age'" filter="{ age: 'number'}" sortable="'age'">
+            {{user.age}}</td>
+    </tr>
+	</table>
 
     </md-content>
 
@@ -54,7 +81,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+    <script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"></script>
+
     <!-- Angular Material Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 
@@ -66,6 +95,7 @@
 
 
 
+
     <!-- Your application bootstrap  -->
     <script src="index.js"></script>
 
@@ -74,9 +104,25 @@
           function($scope, $firebaseArray) {
             var ref = firebase.database().ref().child("Model");
             $scope.Model = $firebaseArray(ref);
+            $scope.addModel = function(){
+            	$scope.Model.$add({
+           	Vendor: $scope.Vendor,
+           	Model: $scope.Model,
+           	Category: $scope.Category,
+           	HeatDissipation: $scope.HeatDissipation,
+           	Systemower: $scope.Systemower,
+            });
+            $scope.Model.push(model);
           });
+  };
     </script>
-    
+
+    <script>
+    	var self = this;
+    	var data = [{name: "O. MR", age: 25} /*,*/];
+		self.tableParams = new NgTableParams({}, { dataset: data});
+    </script>
+
 
 </body>
 </html>
