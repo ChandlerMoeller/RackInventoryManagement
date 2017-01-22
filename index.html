@@ -1,11 +1,11 @@
 <html lang="en">
   <head>
-    
+
     <title>RIM</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Angular Material style sheet -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
-    
+
   </head>
 
   <body ng-app="RackinApp" ng-cloak>
@@ -18,26 +18,29 @@
       </div>
     </md-toolbar>
 
-    <md-content class="md-padding" layout-xs="column" layout="row">
-      <div layout="column" flex>
+    <md-content class="md-padding" layout-xs="column" layout="row" ng-controller="RackinCtrl">
+      <div flex-xs flex-gt-xs="50" layout="column">
         <md-card>
           <md-card-title>
             <md-card-title-text>
               <span class="md-headline">Directories</span>
             </md-card-title-text>
           </md-card-title>
+          <md-card-content>
+          </md-card-content>
           <md-card-actions layout="row" layout-align="end center">
             <md-button>View</md-button>
           </md-card-actions>
         </md-card>
-      </div>
-      <div layout="column" flex>
         <md-card>
           <md-card-title>
             <md-card-title-text>
               <span class="md-headline">Inventory</span>
             </md-card-title-text>
           </md-card-title>
+          <md-card-content>
+            There are <b>{{ RackItem.length }}</b> items in your inventory.
+          </md-card-content>
           <md-card-actions layout="row" layout-align="end center">
             <a href="inventory.html">
               <md-button>View</md-button>
@@ -45,17 +48,40 @@
           </md-card-actions>
         </md-card>
       </div>
-      <div layout="column" flex>
+      <div flex-xs flex-gt-xs="50" layout="column">
         <md-card>
           <md-card-title>
             <md-card-title-text>
               <span class="md-headline">Model Editor</span>
             </md-card-title-text>
           </md-card-title>
+          <md-card-content>
+            You have registered <b>{{ Model.length }}</b> device models.
+          </md-card-content>
           <md-card-actions layout="row" layout-align="end center">
-              <a href="Model.html"> <md-button>View</md-button></a>
+            <a href="Model.html"> <md-button>View</md-button></a>
           </md-card-actions>
         </md-card>
+        <md-card>
+          <md-card-title>
+            <md-card-title-text>
+              <span class="md-headline">Project Info</span>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content>
+            HACK UCSC 2017 Project
+          </md-card-content>
+          <md-card-actions layout="row" layout-align="end center">
+            <a
+              href=https://devpost.com/software/rackinventorymanagement"">
+              <md-button>Devpost</md-button></a>
+            <a
+              href="https://github.com/ChandlerMoeller/RackInventoryManagement">
+              <md-button>GitHub</md-button></a>
+
+          </md-card-actions>
+        </md-card>
+
       </div>
     </md-content>
 
@@ -75,6 +101,19 @@
 
     <!-- Your application bootstrap  -->
     <script src="index.js"></script>
+
+    <script type="text/javascript">
+      app.controller("RackinCtrl",
+          function($scope, $firebaseArray, $mdDialog) {
+            $scope.RackItem = $firebaseArray(
+              firebase.database().ref().child("RackItem")
+              );
+            $scope.Model = $firebaseArray(
+              firebase.database().ref().child("Model")
+              );
+          });
+
+    </script>
 
   </body>
 </html>
