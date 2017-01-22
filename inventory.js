@@ -16,7 +16,7 @@ app.controller("InventoryCtrl",
       $scope.viewRackItem = function(item, ev) {
         $mdDialog.show(
           $mdDialog.confirm()
-          .title(item.Model + " (" + item.AssetTag + ")")
+          .title(item.Model + (item.AssetTag ? " (" + item.AssetTag + ")" : ""))
           .clickOutsideToClose(true)
           .htmlContent(
             "<ul><li><b>Model:</b> " + item.Model
@@ -42,7 +42,7 @@ app.controller("InventoryCtrl",
         $mdDialog.show(
             $mdDialog.confirm()
             .title("Delete Item")
-            .htmlContent("<p>You are about to delete <b>" + item.Model + "</b> " + item.AssetTag + " from the database. Are you sure you would like to continue?</p>")
+            .htmlContent("<p>You are about to delete <b>" + item.Model + "</b>" + (item.AssetTag ? " " + item.AssetTag : "") + " from the database. Are you sure you would like to continue?</p>")
             .ok('Cancel')
             .cancel('Delete')
             .targetEvent(ev)
