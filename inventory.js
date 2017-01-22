@@ -17,7 +17,7 @@ app.controller("InventoryCtrl",
         $mdDialog.show(
           $mdDialog.confirm()
           .title(item.Model + (item.AssetTag ? " (" + item.AssetTag + ")" : ""))
-          .clickOutsideToClose(true)
+          .clickOutsideToClose(false)
           .htmlContent(
             "<ul><li><b>Model:</b> " + item.Model
             + "</li><li><b>Associated RU:</b> " + item.ASsociatedRU

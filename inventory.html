@@ -39,7 +39,7 @@
     <md-content ng-show="mode == 'list'" class="md-padding" layout-xs="column"
       layout="row" style="overflow:auto">
       <md-list ng-cloak flex>
-        <md-list-item ng-repeat="Item in RackItem" ng-click="viewRackItem(Item, $event)">
+        <md-list-item ng-repeat="Item in RackItem | orderBy:'Model'" ng-click="viewRackItem(Item, $event)">
           <p><b>{{ Item.Model }}</b> {{ Item.AssetTag }}</p>
           <md-divider></md-divider>
         </md-list-item>
