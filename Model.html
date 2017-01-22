@@ -36,7 +36,10 @@
           ng-click="mode = 'add'">
           <md-icon>add</md-icon>
         </md-button>
-
+     <md-button ng-show="mode != 'list'" class="md-icon-button" aria-label="New"
+          ng-click="mode = 'list'">
+          <md-icon>arrow_back</md-icon>
+        </md-button>
 
         <md-content ng-show="mode == 'list'" class="md-padding" layout-xs="column"
       layout="row" style="overflow:auto">
