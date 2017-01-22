@@ -27,8 +27,8 @@
           </span>
         </h2>
         <span flex></span>
-        <md-button ng-show="mode != 'edit'" class="md-icon-button" aria-label="New"
-          ng-click="mode = 'edit'; edit = 'new'; RackItemObj = RackItemNew();">
+        <md-button ng-show="mode != 'add'" class="md-icon-button" aria-label="New"
+          ng-click="mode = 'add'">
           <md-icon>add</md-icon>
         </md-button>
       </div>
@@ -38,63 +38,65 @@
       <md-list ng-cloak>
         <md-list-item ng-repeat="Item in RackItem">
           <p>{{ Item.Model }} <small>{{ Item.AssetTag }}</small></p>
+          <md-button class="md-secondary md-icon-button"
+            ng-click="RackItem.$remove(Item);">
+            <md-icon>delete</md-icon>
+          </md-button>
         </md-list-item>
       </md-list>
     </md-content>
 
-    <md-content ng-show="mode == 'edit'" class="md-padding">
-      <form name="RackItemEdit">
+    <md-content ng-show="mode == 'add'" class="md-padding">
+      <form ng-submit="newRackItem()">
         <md-input-container class="md-block" flex-gt-xs>
           <label>Model</label>
-          <input ng-model="RackItemObj.Model">
+          <input ng-model="RackItemNew.Model">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Associated RU</label>
-          <input ng-model="RackItemObj.AssociatedRU">
+          <input ng-model="RackItemNew.AssociatedRU">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Label</label>
-          <input ng-model="RackItemObj.Label">
+          <input ng-model="RackItemNew.Label">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Asset Tag</label>
-          <input ng-model="RackItemObj.AssetTag">
+          <input ng-model="RackItemNew.AssetTag">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Serial Number</label>
-          <input ng-model="RackItemObj.SN">
+          <input ng-model="RackItemNew.SN">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Description</label>
-          <input ng-model="RackItemObj.Description">
+          <input ng-model="RackItemNew.Description">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Direction</label>
-          <input ng-model="RackItemObj.Direction">
+          <input ng-model="RackItemNew.Direction">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Location</label>
-          <input ng-model="RackItemObj.Location">
+          <input ng-model="RackItemNew.Location">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>System Power</label>
-          <input ng-model="RackItemObj.SystemPower">
+          <input ng-model="RackItemNew.SystemPower">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Heat Dissipation</label>
-          <input ng-model="RackItemObj.HeatDissipation">
+          <input ng-model="RackItemNew.HeatDissipation">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Plugs</label>
-          <input ng-model="RackItemObj.Plugs">
+          <input ng-model="RackItemNew.Plugs">
         </md-input-container>
         <md-input-container class="md-block" flex-gt-xs>
           <label>Ports</label>
-          <input ng-model="RackItemObj.Ports">
+          <input ng-model="RackItemNew.Ports">
         </md-input-container>
-        <span style="float-right">
-          <md-button ng-click="RackItem.$add(RackItemObj); RackItemObj = RackItemNew(); mode = 'list';">Save</md-button>
-        </span>
+        <md-button type="submit">Add item</md-button>
       </form>
     </md-content>
 
@@ -117,22 +119,6 @@
     <script src="index.js"></script>
 
     <script type="text/javascript">
-      var RackItemNew = function() {
-        return {
-          Model: "",
-          AssociatedRU: "",
-          Label: "",
-          AssetTag: "",
-          SN: "",
-          Description: "",
-          Direction: "",
-          Location: "",
-          SystemPower: "",
-          HeatDissipartion: "",
-          Plugs: "",
-          Ports: ""
-        };
-      }
 
 app.controller("InventoryCtrl",
     function($scope, $firebaseArray) {
@@ -143,8 +129,11 @@ app.controller("InventoryCtrl",
         firebase.database().ref().child("Model")
         );
       $scope.mode = 'list';
-      $scope.edit = 'new';
-      $scope.RackItemObj = RackItemNew();
+      $scope.RackItemNew = null;
+      $scope.newRackItem = function() {
+        $scope.RackItem.$add($scope.RackItemNew);
+        $scope.mode = 'list';
+      };
     });
     </script>
 
